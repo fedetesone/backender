@@ -1,0 +1,17 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.glovoapp.backender.sorting.SortingPriorityConfig",
+      "name": "backender.sorting",
+      "type": "com.glovoapp.backender.sorting.SortingPriorityConfig"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.glovoapp.backender.sorting.SortingPriorityConfig",
+      "name": "backender.sorting.sorting-criteria",
+      "type": "java.util.Map<java.lang.Integer,java.lang.String>"
+    }
+  ]
+}
