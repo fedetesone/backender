@@ -1,4 +1,4 @@
-package com.glovoapp.backender;
+package com.glovoapp.backender.resources;
 
 import com.glovoapp.backender.entities.Courier;
 import com.glovoapp.backender.entities.Location;

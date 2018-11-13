@@ -34,7 +34,7 @@ public class CourierRepository {
                 .orElse(null);
     }
 
-    public List<Courier> findAll() {
+    List<Courier> findAll() {
         return new ArrayList<>(couriers);
     }
 }

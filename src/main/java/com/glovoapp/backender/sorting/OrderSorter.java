@@ -1,6 +1,5 @@
 package com.glovoapp.backender.sorting;
 
-import com.glovoapp.backender.utils.DistanceCalculator;
 import com.glovoapp.backender.entities.Courier;
 import com.glovoapp.backender.entities.Order;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +37,9 @@ public class OrderSorter {
     }
 
     public Stream<Order> sortOrders(Stream<Order> orders, Courier courier) {
+        // The comparators work over CourierPrioritizedOrder. Then the order is extracted again.
         return orders
-                .map(o -> createPrioritizedOrder(o, courier))
+                .map(o -> new CourierPrioritizedOrder(o, courier, slotDistanceInKm))
                 .sorted(compareOrders())
                 .map(CourierPrioritizedOrder::getOrder);
     }
@@ -51,32 +51,23 @@ public class OrderSorter {
                 .thenComparing(sortingCriteriaMap.get(SortingCriteria.valueOf(sortingCriteria.get(4))));
     }
 
+    // Orders that are close to the courier, in slots.
     private static Comparator<CourierPrioritizedOrder> sortByPriority() {
         return Comparator.comparing(CourierPrioritizedOrder::getPriority);
     }
 
+    // Orders that belong to a VIP customer.
     private static Comparator<CourierPrioritizedOrder> sortByVip() {
         return Comparator.comparing(po -> !po.getOrder().getVip()); // Reverse order (true values first).
     }
 
+    // Orders that are food.
     private static Comparator<CourierPrioritizedOrder> sortByFood() {
         return Comparator.comparing(po -> !po.getOrder().getFood()); // Reverse order (true values first).
     }
 
+    // By absolute distance.
     private static Comparator<CourierPrioritizedOrder> sortByAbsoluteDistance() {
         return Comparator.comparing(CourierPrioritizedOrder::getDistanceToCourier);
-    }
-
-    public CourierPrioritizedOrder createPrioritizedOrder(Order order, Courier courier) {
-        double distanceToCourier = getDistanceToCourier(order, courier);
-
-        return new CourierPrioritizedOrder()
-                .withPriority((int) (distanceToCourier / slotDistanceInKm))
-                .withOrder(order)
-                .withDistanceToCourier(distanceToCourier);
-    }
-
-    private double getDistanceToCourier(Order order, Courier courier) {
-        return DistanceCalculator.calculateDistance(order.getDelivery(), courier.getLocation());
     }
 }
