@@ -1,13 +1,13 @@
 package com.glovoapp.backender.resources;
 
-import com.glovoapp.backender.exceptions.CourierNotFoundException;
-import com.glovoapp.backender.repositories.CourierRepository;
-import com.glovoapp.backender.filters.OrderFilter;
-import com.glovoapp.backender.repositories.OrderRepository;
-import com.glovoapp.backender.sorting.OrderSorter;
 import com.glovoapp.backender.entities.Courier;
 import com.glovoapp.backender.entities.Order;
 import com.glovoapp.backender.entities.OrderVM;
+import com.glovoapp.backender.exceptions.CourierNotFoundException;
+import com.glovoapp.backender.filters.OrderFilter;
+import com.glovoapp.backender.repositories.CourierRepository;
+import com.glovoapp.backender.repositories.OrderRepository;
+import com.glovoapp.backender.sorting.OrderSorter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,9 +28,9 @@ public class OrderResource {
 
     @Autowired
     public OrderResource(OrderRepository orderRepository,
-                  CourierRepository courierRepository,
-                  OrderSorter orderSorter,
-                  OrderFilter orderFilter) {
+                         CourierRepository courierRepository,
+                         OrderSorter orderSorter,
+                         OrderFilter orderFilter) {
         this.orderRepository = orderRepository;
         this.courierRepository = courierRepository;
         this.orderSorter = orderSorter;

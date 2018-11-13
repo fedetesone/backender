@@ -1,9 +1,10 @@
-package com.glovoapp.backender;
+package com.glovoapp.backender.sorting;
 
 import com.glovoapp.backender.entities.Courier;
 import com.glovoapp.backender.entities.Location;
 import com.glovoapp.backender.entities.Order;
 import com.glovoapp.backender.entities.Vehicle;
+import com.glovoapp.backender.sorting.CourierPrioritizedOrder;
 import com.glovoapp.backender.sorting.OrderSorter;
 import com.glovoapp.backender.sorting.SortingCriteria;
 import com.glovoapp.backender.sorting.SortingPriorityConfig;
@@ -98,18 +99,18 @@ public class OrderSorterTest {
     }
 
     @Test
-    void createPrioritizedOrder_testPriorities() {
-        assertEquals(0, subject.createPrioritizedOrder(order1, courier).getPriority());
-        assertEquals(0, subject.createPrioritizedOrder(order2, courier).getPriority());
-        assertEquals(0, subject.createPrioritizedOrder(order3, courier).getPriority());
-        assertEquals(0, subject.createPrioritizedOrder(order4, courier).getPriority());
-        assertEquals(0, subject.createPrioritizedOrder(order5, courier).getPriority());
-        assertEquals(1, subject.createPrioritizedOrder(order6, courier).getPriority());
-        assertEquals(1, subject.createPrioritizedOrder(order7, courier).getPriority());
-        assertEquals(2, subject.createPrioritizedOrder(order8, courier).getPriority());
-        assertEquals(2, subject.createPrioritizedOrder(order9, courier).getPriority());
-        assertEquals(4, subject.createPrioritizedOrder(order10, courier).getPriority());
-        assertEquals(5, subject.createPrioritizedOrder(order11, courier).getPriority());
+    public void createPrioritizedOrder_testPriorities() {
+        assertEquals(0, new CourierPrioritizedOrder(order1, courier, slotDistanceInKm).getPriority());
+        assertEquals(0, new CourierPrioritizedOrder(order2, courier, slotDistanceInKm).getPriority());
+        assertEquals(0, new CourierPrioritizedOrder(order3, courier, slotDistanceInKm).getPriority());
+        assertEquals(0, new CourierPrioritizedOrder(order4, courier, slotDistanceInKm).getPriority());
+        assertEquals(0, new CourierPrioritizedOrder(order5, courier, slotDistanceInKm).getPriority());
+        assertEquals(1, new CourierPrioritizedOrder(order6, courier, slotDistanceInKm).getPriority());
+        assertEquals(1, new CourierPrioritizedOrder(order7, courier, slotDistanceInKm).getPriority());
+        assertEquals(2, new CourierPrioritizedOrder(order8, courier, slotDistanceInKm).getPriority());
+        assertEquals(2, new CourierPrioritizedOrder(order9, courier, slotDistanceInKm).getPriority());
+        assertEquals(4, new CourierPrioritizedOrder(order10, courier, slotDistanceInKm).getPriority());
+        assertEquals(5, new CourierPrioritizedOrder(order11, courier, slotDistanceInKm).getPriority());
     }
 
     @Test

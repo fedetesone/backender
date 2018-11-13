@@ -1,10 +1,10 @@
 package com.glovoapp.backender.filters;
 
-import com.glovoapp.backender.utils.DistanceCalculator;
-import com.glovoapp.backender.exceptions.InvalidDistanceThresholdException;
 import com.glovoapp.backender.entities.Courier;
 import com.glovoapp.backender.entities.Order;
 import com.glovoapp.backender.entities.Vehicle;
+import com.glovoapp.backender.exceptions.InvalidDistanceThresholdException;
+import com.glovoapp.backender.utils.DistanceCalculator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -25,10 +25,16 @@ public class OrderFilter {
         this.distanceThresholdInKm = distanceThresholdInKm;
     }
 
+    /**
+     * If the description of the order contains any excluded word, returns true only if the courier is equipped with a Glovo Box.
+     */
     public Predicate<Order> filterByCourierBox(final Courier courier) {
         return o -> !containsExcludedWords(o.getDescription()) || courier.getBox();
     }
 
+    /**
+     * If the order is further than distanceThresholdInKm to the courier, will only return true if the courier has motorcycle or electric scooter.
+     */
     public Predicate<Order> filterByDistanceToCourier(final Courier courier) {
         if (distanceThresholdInKm <= 0) {
             throw new InvalidDistanceThresholdException();
