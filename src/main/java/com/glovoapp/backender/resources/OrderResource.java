@@ -3,11 +3,13 @@ package com.glovoapp.backender.resources;
 import com.glovoapp.backender.entities.Courier;
 import com.glovoapp.backender.entities.Order;
 import com.glovoapp.backender.entities.OrderVM;
+import com.glovoapp.backender.entities.Stat;
 import com.glovoapp.backender.exceptions.CourierNotFoundException;
 import com.glovoapp.backender.filters.OrderFilter;
 import com.glovoapp.backender.repositories.CourierRepository;
 import com.glovoapp.backender.repositories.OrderRepository;
 import com.glovoapp.backender.sorting.OrderSorter;
+import com.glovoapp.backender.utils.DistanceCalculator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,5 +65,35 @@ public class OrderResource {
                 .map(order -> new OrderVM(order.getId(), order.getDescription()))
                 .collect(Collectors.toList());
     }
+
+    @GetMapping(value = "/stats")
+    @ResponseBody
+    public Stat getStats() {
+        final List<Order> allOrders = orderRepository.findAll();
+        final List<Courier> couriers = courierRepository.findAll();
+
+        final int numberOfCouriers = couriers.size();
+        final long numberOfNonFoodOrders = allOrders.stream()
+                .filter(o -> !o.getFood())
+                .count();
+
+        final int totalOrdersCount = allOrders.size();
+        final float foodPercentage = (float) numberOfNonFoodOrders / (float) totalOrdersCount;
+
+        // Average courier-to-pickup distance in meters
+        double averageCourierToPickupDistanceInMeters;
+        int countOfDistances = numberOfCouriers * totalOrdersCount;
+        double totalDistanceInKilometers = 0;
+
+        for (Courier c : couriers) {
+            for (Order o : allOrders) {
+                totalDistanceInKilometers += DistanceCalculator.calculateDistance(c.getLocation(), o.getPickup());
+            }
+        }
+
+        averageCourierToPickupDistanceInMeters = (totalDistanceInKilometers / countOfDistances) * 1000;
+        return new Stat(totalOrdersCount, numberOfCouriers, foodPercentage, averageCourierToPickupDistanceInMeters);
+    }
+
 
 }
